@@ -1,0 +1,25 @@
+export enum EstadoPrestamo{
+    ACTIVO='ACTIVO',
+    VENCIDO='VENCIDO',
+    DEVUELTO='DEVUELTO',
+    RENOVADO='RENOVADO'
+}
+export enum CategoriaLibro{
+    FICCION='FICCION',
+    CIENCIA='CIENCIA',
+    HISTORIA='HISTORIA',
+    MATEMATICAS='MATEMATICAS',
+    LITERATURA='LITERATURA',
+    REVISTA='REVISTA'
+}
+export enum TipoUsuario{
+    ESTUDIANTE_PRIMARIA='PRIMARIA',
+    ESTUDIANTE_SECUNDARIA='SECUNDARIA',
+    DOCENTE='DOCENTE'
+}
+export enum EstadoEjemplar{
+    DISPONIBLE='DISPONIBLE',
+    PRESTADO='PRESTADO',
+    BAJA='BAJA',
+}
+
