@@ -1,11 +1,11 @@
-import {CategoriaLibro} from "./index";
+import {Categoria} from "./categoLibro";
 
 export abstract class RecursoBiblioteca{
     protected readonly id:string;
-    titulo:string;
-    categoria: CategoriaLibro;
+    protected titulo:string;
+    protected categoria: Categoria;
     protected readonly fechaRegistro: Date;
-    constructor(id:string,titulo:string, categoria: CategoriaLibro){
+    constructor(id:string,titulo:string, categoria: Categoria){
         this.id=id;
         this.titulo=titulo;
         this.categoria=categoria;
@@ -21,7 +21,7 @@ export abstract class RecursoBiblioteca{
     return this.titulo;
   }
 
-  getCategoria(): CategoriaLibro {
+  getCategoria(): Categoria {
     return this.categoria;
   }
 

@@ -1,4 +1,3 @@
-import {CategoriaLibro} from "./index";
 
 export class Categoria{
     private static contador =1;
