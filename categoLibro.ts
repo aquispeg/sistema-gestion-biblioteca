@@ -18,6 +18,6 @@ export class Categoria{
 
     }
     toString():string{
-        return `[${this.id}] ${this.nombre} - Máx. ${this.diasMaxPrestamo} días`;
+        return `[${this.id}] ${this.nombre}- Máx. ${this.diasMaxPrestamo} días`;
     }
 }
