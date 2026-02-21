@@ -15,6 +15,7 @@ export class categoriaLibro{
     }
     esPrestable():boolean{
         return true;
+        
     }
     toString():string{
         return `[${this.id}] ${this.nombre} (${this.CategoriaLibro}) - Máx. ${this.diasMaxPrestamo} días`;
