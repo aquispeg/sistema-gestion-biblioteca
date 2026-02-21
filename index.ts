@@ -1,8 +1,7 @@
 export enum EstadoPrestamo{
     ACTIVO='ACTIVO',
     VENCIDO='VENCIDO',
-    DEVUELTO='DEVUELTO',
-    RENOVADO='RENOVADO'
+    DEVUELTO='DEVUELTO'
 }
 export enum CategoriaLibro{
     FICCION='FICCION',
