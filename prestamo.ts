@@ -1,9 +1,19 @@
 import {EstadoPrestamo} from "./index";
 import {Ejemplar} from "./ejemplar";
+import {Usuario} from "./Usuario"
 export class Prestamo{
+    private static contador= 1;
+    private id:string;
     private estado:EstadoPrestamo=EstadoPrestamo.ACTIVO;
-    constructor(public ejemplar:Ejemplar, public fechaVen:Date){
+    private fechaVen: Date;
+    constructor(private usuario:Usuario,public ejemplar:Ejemplar){
+        this.id = `PRE-${Prestamo.contador++}`;
+        this.fechaVen = new Date();
+        this.fechaVen.setDate(this.fechaVen.getDate() + 3);
         this.ejemplar.prestar();
+    }
+    getId():string{
+        return this.id;
     }
     verificarVenci():void{
         if(new Date()>this.fechaVen && this.estado === EstadoPrestamo.ACTIVO){
