@@ -3,7 +3,7 @@ export class Categoria{
     private static contador =1;
     readonly id: string;
     private nombre:string;
-    private diasMaxPrestamo: number;
+    diasMaxPrestamo: number;
     private prestable: boolean;
 
     constructor(nombre:string,diasMaxPrestamo:number=3, prestable:boolean=true){

@@ -1,6 +1,5 @@
 import {RecursoBiblioteca} from "./recursoBiblioteca";
 import {Ejemplar} from "./ejemplar";
-import {EstadoEjemplar} from "./index";
 import {Categoria} from "./categoLibro";
 
 export class Libro extends RecursoBiblioteca{
@@ -11,6 +10,9 @@ export class Libro extends RecursoBiblioteca{
     }
     getAutor():string{
       return this.autor;
+  }
+   getDiasMaxPrestamo(): number {
+    return this.getCategoria().getDiasMaxPrestamo();
   }
 
     agregarEjemplar(ejemplar: Ejemplar): void {

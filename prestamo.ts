@@ -1,27 +1,39 @@
 import {EstadoPrestamo} from "./index";
 import {Ejemplar} from "./ejemplar";
-import {Usuario} from "./Usuario"
+import {Libro} from "./libro";
+import {Usuario} from "./Usuario";
 
 export class Prestamo{
     private static contador= 1;
     private id:string;
     private estado:EstadoPrestamo=EstadoPrestamo.ACTIVO;
+    private fechaIni:Date;
     private fechaVen: Date;
-    constructor(private usuario:Usuario,public ejemplar:Ejemplar){
+    
+    constructor(private usuario:Usuario,private libro: Libro, private ejemplar:Ejemplar){
         this.id = `PRE-${Prestamo.contador++}`;
-        this.fechaVen = new Date();
-        this.fechaVen.setDate(this.fechaVen.getDate() + 3);
+        this.fechaIni = new Date();
+        const dias = this.libro.getDiasMaxPrestamo();
+        this.fechaVen = new Date(this.fechaIni);
+        this.fechaVen.setDate(this.fechaVen.getDate() + dias);
         this.ejemplar.prestar();
     }
     getId():string{
         return this.id;
     }
-    verificarVenci():void{
-        if(new Date()>this.fechaVen && this.estado === EstadoPrestamo.ACTIVO){
-            this.estado=EstadoPrestamo.VENCIDO;
+    estaActivo(): boolean {
+        return this.estado === EstadoPrestamo.ACTIVO;
+    }
+    verificarVencimiento(): void {
+        if (this.estado === EstadoPrestamo.ACTIVO && new Date() > this.fechaVen) {
+            this.estado = EstadoPrestamo.VENCIDO;
         }
     }
     devolver(): void {
+        if (this.estado === EstadoPrestamo.DEVUELTO) {
+            throw new Error("El préstamo ya fue devuelto");
+        }
+
         this.estado = EstadoPrestamo.DEVUELTO;
         this.ejemplar.devolver();
     }
