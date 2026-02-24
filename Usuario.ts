@@ -1,16 +1,17 @@
 import {Prestamo} from "./prestamo";
-import {EstadoPrestamo} from "./index";
+import {EstadoPrestamo,TipoUsuario} from "./index";
 
 export abstract class Usuario {
 
   protected prestamos: Prestamo[] = [];
-
   protected readonly id: string;
   protected nombre: string;
+  readonly tipousuario:TipoUsuario;
 
-  constructor(id: string, nombre: string) {
+  constructor(id: string, nombre: string, tipousuario:TipoUsuario) {
     this.id = id;
     this.nombre = nombre;
+    this.tipousuario=tipousuario;
   }
 
   abstract getMaxPrestamos(): number;
@@ -40,30 +41,33 @@ export abstract class Usuario {
   getNombre(): string {
     return this.nombre;
   }
+  getTipoUsuario(): TipoUsuario {
+    return this.tipousuario;
+  }
+
+  toString(): string {
+    return `[${this.id}] ${this.nombre} (${this.tipousuario})`;
+  }
+
 }
 
 // ===============================
 
 export class Estudiante extends Usuario {
-
-  constructor(
-    id: string,
-    nombre: string,
-    private nivel: "PRIMARIA" | "SECUNDARIA"
-  ) {
-    super(id, nombre);
-  }
-
-  getMaxPrestamos(): number {
-    return this.nivel === "PRIMARIA" ? 2 : 3;
-  }
+    constructor(id: string, nombre: string, grado: string) {
+        super(id, nombre, grado === "PRIMARIA" 
+            ? TipoUsuario.ESTUDIANTE_PRIMARIA 
+            : TipoUsuario.ESTUDIANTE_SECUNDARIA
+        );
+    }
+    getMaxPrestamos(): number { return 2; }
 }
 
 // ===============================
 
 export class Docente extends Usuario {
-
-  getMaxPrestamos(): number {
-    return 5;
-  }
+    constructor(id: string, nombre: string) {
+        super(id, nombre, TipoUsuario.DOCENTE);
+    }
+    getMaxPrestamos(): number { return 5; }
 }
