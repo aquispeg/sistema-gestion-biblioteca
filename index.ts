@@ -19,6 +19,6 @@ export enum TipoUsuario{
 export enum EstadoEjemplar{
     DISPONIBLE='DISPONIBLE',
     PRESTADO='PRESTADO',
-    BAJA='BAJA',
+    
 }
 

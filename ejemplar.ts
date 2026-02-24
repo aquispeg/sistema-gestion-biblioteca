@@ -2,7 +2,7 @@ import {EstadoEjemplar} from "./index";
 export class Ejemplar {
     constructor(
         readonly codigo:string,
-        private estado: EstadoEjemplar
+        private estado: EstadoEjemplar=EstadoEjemplar.DISPONIBLE
     ){}
     getEstado(): EstadoEjemplar {
         return this.estado;
