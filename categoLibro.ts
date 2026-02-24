@@ -1,14 +1,16 @@
-
+import {CategoriaLibro} from "./index";
 export class Categoria{
     private static contador =1;
     readonly id: string;
     private nombre:string;
     diasMaxPrestamo: number;
+    categoria: CategoriaLibro
     private prestable: boolean;
 
-    constructor(nombre:string,diasMaxPrestamo:number=3, prestable:boolean=true){
+    constructor(nombre:string,categoria:CategoriaLibro,diasMaxPrestamo:number=3, prestable:boolean=true){
         this.id = `CAT- ${Categoria.contador++}`;
         this.nombre=nombre;
+        this.categoria=categoria;
         this.diasMaxPrestamo=diasMaxPrestamo;
         this.prestable=prestable;
 
@@ -24,7 +26,7 @@ export class Categoria{
         return this.prestable;
 
     }
-    toString():string{
-        return `[${this.id}] ${this.nombre}- Máx. ${this.diasMaxPrestamo} días`;
-    }
+    toString(): string {
+        return `[${this.id}] ${this.nombre} (${this.categoria}) - Máx. ${this.diasMaxPrestamo} días`;
+   }
 }

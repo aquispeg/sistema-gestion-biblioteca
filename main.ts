@@ -4,8 +4,7 @@ import {Categoria} from "./categoLibro";
 import {Libro} from "./libro";
 import {Ejemplar} from "./ejemplar";
 import {Estudiante,Docente} from "./Usuario";
-import {Prestamo} from "./prestamo";
-
+import {CategoriaLibro} from "./index"; 
 
 // =====================================
 // INICIALIZAR SISTEMA
@@ -19,8 +18,8 @@ console.log("===== SIMULACIÓN SISTEMA BIBLIOTECA =====\n");
 // CREAR CATEGORÍAS
 // =====================================
 
-const catGeneral = new Categoria("General", 3, true);
-const catReferencia = new Categoria("Referencia", 0, false);
+const catGeneral = new Categoria("General", CategoriaLibro.FICCION,3, true);
+const catReferencia = new Categoria("Referencia",CategoriaLibro.HISTORIA, 0, false);
 
 // =====================================
 // CREAR LIBROS
