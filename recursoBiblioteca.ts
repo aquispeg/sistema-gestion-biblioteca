@@ -11,9 +11,11 @@ export abstract class RecursoBiblioteca{
         this.categoria=categoria;
         this.fechaRegistro= new Date();
     }
-    abstract esPrestable():boolean;
+  esPrestable():boolean{
+    return this.categoria.esPrestable();
+  }
 
-    getId(): string {
+  getId(): string {
     return this.id;
   }
 
@@ -30,6 +32,6 @@ export abstract class RecursoBiblioteca{
   }
 
   toString(): string {
-    return `[${this.id}] ${this.titulo} - ${this.categoria.toString()}`;
+    return `[${this.id}] ${this.titulo} - ${this.categoria}`;
   }
 }

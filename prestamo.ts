@@ -1,6 +1,7 @@
 import {EstadoPrestamo} from "./index";
 import {Ejemplar} from "./ejemplar";
 import {Usuario} from "./Usuario"
+
 export class Prestamo{
     private static contador= 1;
     private id:string;

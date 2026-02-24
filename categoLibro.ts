@@ -2,8 +2,8 @@
 export class Categoria{
     private static contador =1;
     readonly id: string;
-    nombre:string;
-    diasMaxPrestamo: number;
+    private nombre:string;
+    private diasMaxPrestamo: number;
     private prestable: boolean;
 
     constructor(nombre:string,diasMaxPrestamo:number=3, prestable:boolean=true){
@@ -12,6 +12,13 @@ export class Categoria{
         this.diasMaxPrestamo=diasMaxPrestamo;
         this.prestable=prestable;
 
+    }
+    getNombre(): string {
+    return this.nombre;
+    }
+
+    getDiasMaxPrestamo(): number {
+    return this.diasMaxPrestamo;
     }
     esPrestable():boolean{
         return this.prestable;
