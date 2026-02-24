@@ -21,6 +21,12 @@ export class Prestamo{
     getId():string{
         return this.id;
     }
+    getLibro(): Libro {
+        return this.libro;
+    }
+    getUsuario(): Usuario {
+       return this.usuario;
+    }
     estaActivo(): boolean {
         return this.estado === EstadoPrestamo.ACTIVO;
     }

@@ -1,21 +1,32 @@
 import {Prestamo} from "./prestamo";
+import {EstadoPrestamo} from "./index";
+
 export abstract class Usuario {
 
   protected prestamos: Prestamo[] = [];
 
-  constructor(
-    protected readonly id: string,
-    protected nombre: string
-  ) {}
+  protected readonly id: string;
+  protected nombre: string;
+
+  constructor(id: string, nombre: string) {
+    this.id = id;
+    this.nombre = nombre;
+  }
 
   abstract getMaxPrestamos(): number;
 
   puedeSolicitarPrestamo(): boolean {
     const activos = this.prestamos.filter(
-      p => p.getEstado() === "ACTIVO"
+      p => p.getEstado() === EstadoPrestamo.ACTIVO
     );
 
     return activos.length < this.getMaxPrestamos();
+  }
+  tienePrestamoActivoDeLibro(libroId: string): boolean {
+  return this.prestamos.some(
+    p => p.getEstado() === EstadoPrestamo.ACTIVO &&
+         p.getLibro().getId() === libroId
+    );
   }
 
   agregarPrestamo(prestamo: Prestamo): void {
