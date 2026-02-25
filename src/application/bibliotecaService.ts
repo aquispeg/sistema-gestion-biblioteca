@@ -1,7 +1,7 @@
-import { Usuario } from "./Usuario";
-import { Libro } from "./libro";
-import { Prestamo } from "./prestamo";
-import { Ejemplar } from "./ejemplar";
+import { Usuario } from "../domain/Usuario";
+import { Libro } from "../domain/libro";
+import { Prestamo } from "../domain/prestamo";
+import { Ejemplar } from "../domain/ejemplar";
 
 export class BibliotecaService {
 

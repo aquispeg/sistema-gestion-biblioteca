@@ -1,10 +1,10 @@
 //Simulacion del sistema
-import {BibliotecaService} from "./bibliotecaService";
-import {Categoria} from "./categoLibro";
-import {Libro} from "./libro";
-import {Ejemplar} from "./ejemplar";
-import {Estudiante,Docente} from "./Usuario";
-import {CategoriaLibro} from "./index"; 
+import {BibliotecaService} from "../../application/bibliotecaService";
+import {Categoria} from "../../domain/categoLibro";
+import {Libro} from "../../domain/libro";
+import {Ejemplar} from "../../domain/ejemplar";
+import {Estudiante,Docente} from "../../domain/Usuario";
+import {CategoriaLibro} from "../../domain/enums/index"; 
 
 // =====================================
 // INICIALIZAR SISTEMA
