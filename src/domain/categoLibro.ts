@@ -1,4 +1,4 @@
-import {CategoriaLibro} from "../domain/enums/index";
+import {CategoriaLibro} from "./enums/index";
 export class Categoria{
     private static contador =1;
     readonly id: string;
