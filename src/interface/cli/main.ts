@@ -199,3 +199,56 @@ function listarPrestamos(): void {
     );
   });
 }
+// ================================================
+// MENÚ PRINCIPAL
+// ================================================
+
+function mostrarMenu(): void {
+  console.log("\n╔══════════════════════════════════════╗");
+  console.log("║    SISTEMA DE GESTIÓN BIBLIOTECA     ║");
+  console.log("╠══════════════════════════════════════╣");
+  console.log("║  1. Registrar libro                  ║");
+  console.log("║  2. Registrar usuario                ║");
+  console.log("║  3. Realizar préstamo                ║");
+  console.log("║  4. Devolver libro                   ║");
+  console.log("║  5. Listar préstamos                 ║");
+  console.log("║  0. Salir                            ║");
+  console.log("╚══════════════════════════════════════╝");
+}
+
+async function iniciar(): Promise<void> {
+  console.log("\n✅ Sistema iniciado con datos de ejemplo.");
+  console.log("   Libros: L1, L2, L3, L4");
+  console.log("   Usuarios: U1 (Ana), U2 (Luis), U3 (Carlos)");
+
+  let activo = true;
+
+  while (activo) {
+    mostrarMenu();
+    const opcion = await preguntar("\nElige una opción: ");
+
+    switch (opcion) {
+      case "1": await registrarLibro();   break;
+      case "2": await registrarUsuario(); break;
+      case "3": await realizarPrestamo(); break;
+      case "4": await devolverLibro();    break;
+      case "5": listarPrestamos();        break;
+      case "0":
+        console.log("\n👋 Cerrando el sistema. ¡Hasta luego!");
+        activo = false;
+        break;
+      default:
+        console.log("Opción inválida. Elige entre 0 y 5.");
+    }
+  }
+
+  rl.close();
+}
+
+// ================================================
+// ARRANCAR
+// ================================================
+
+iniciar();
+
+
