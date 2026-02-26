@@ -1,4 +1,4 @@
-import {EstadoPrestamo} from "./index";
+import {EstadoPrestamo} from "./enums/index";
 import {Ejemplar} from "./ejemplar";
 import {Libro} from "./libro";
 import {Usuario} from "./Usuario";

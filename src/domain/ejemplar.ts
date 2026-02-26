@@ -1,4 +1,4 @@
-import {EstadoEjemplar} from "./index";
+import {EstadoEjemplar} from "./enums/index";
 export class Ejemplar {
     constructor(
         readonly codigo:string,

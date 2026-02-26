@@ -1,5 +1,5 @@
 import {Prestamo} from "./prestamo";
-import {EstadoPrestamo,TipoUsuario} from "./index";
+import {EstadoPrestamo,TipoUsuario} from "./enums/index";
 
 export abstract class Usuario {
 
