@@ -27,9 +27,27 @@ export class Prestamo{
     getUsuario(): Usuario {
        return this.usuario;
     }
+    getFechaInicio(): Date { 
+        return this.fechaIni; 
+    }
+    getFechaVencimiento(): Date { 
+        return this.fechaVen; 
+    }
     estaActivo(): boolean {
         return this.estado === EstadoPrestamo.ACTIVO;
     }
+    getDiasRetraso(): number {
+        const hoy = new Date();
+        if (hoy <= this.fechaVen) return 0;
+        const diff = hoy.getTime() - this.fechaVen.getTime();
+        return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+    getDiasRestantes(): number {
+        const hoy = new Date();
+        const diff = this.fechaVen.getTime() - hoy.getTime();
+        return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+
     verificarVencimiento(): void {
         if (this.estado === EstadoPrestamo.ACTIVO && new Date() > this.fechaVen) {
             this.estado = EstadoPrestamo.VENCIDO;
