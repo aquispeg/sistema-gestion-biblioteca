@@ -97,7 +97,7 @@ async function registrarLibro(): Promise<void> {
   const cantidad = parseInt(numEjemplares);
 
   if (isNaN(cantidad) || cantidad <= 0) {
-    console.log("❌ Cantidad inválida.");
+    console.log(" Cantidad inválida.");
     return;
   }
 
@@ -166,15 +166,22 @@ async function devolverLibro(): Promise<void> {
   }
 
   console.log("Préstamos activos:");
-  activos.forEach((p) => {
-    console.log(`  ID: ${p.getId()} | Usuario: ${p.getUsuario().getNombre()} | Libro: ${p.getLibro().getTitulo()}`);
+  activos.forEach(p => {
+    const dias = p.getDiasRestantes();
+    const aviso = dias < 0 ? ` VENCIDO (${Math.abs(dias)} días)` : ` (${dias} días restantes)`;
+    console.log(`  ${p.getId()} | ${p.getUsuario().getNombre()} | "${p.getLibro().getTitulo()}"${aviso}`);
   });
-
   const prestamoId = await preguntar("ID del préstamo a devolver: ");
 
   try {
-    sistema.devolverLibro(prestamoId);
-    console.log(`✔ Devolución registrada correctamente.`);
+    const multa = sistema.devolverLibro(prestamoId);
+    if (multa) {
+      console.log(`Devolución con retraso. Se generó una multa:`);
+      console.log(`   ${multa.toString()}`);
+      console.log(`   Usa la opción 7 para pagar la multa con ID: ${multa.getId()}`);
+    } else {
+      console.log(`✔ Devolución registrada correctamente. Sin multa.`);
+    }
   } catch (e: any) {
     console.log(`Error: ${e.message}`);
   }
@@ -199,6 +206,70 @@ function listarPrestamos(): void {
     );
   });
 }
+function verAlertas(): void {
+  console.log("\n--- ALERTAS DE VENCIMIENTO ---");
+
+  // Préstamos próximos a vencer (3 días o menos)
+  const proximos = sistema.getAlertasVencimiento(3);
+  // Préstamos ya vencidos
+  const vencidos = sistema.getPrestamosvencidos();
+
+  if (proximos.length === 0 && vencidos.length === 0) {
+    console.log("✔ No hay alertas en este momento.");
+    return;
+  }
+
+  if (proximos.length > 0) {
+    console.log("\n  PRÓXIMOS A VENCER:");
+    proximos.forEach(p => {
+      console.log(
+        `  [${p.getId()}] ${p.getUsuario().getNombre()} | ` +
+        `"${p.getLibro().getTitulo()}" | ` +
+        `Vence en ${p.getDiasRestantes()} día(s)`
+      );
+    });
+  }
+
+  if (vencidos.length > 0) {
+    console.log("\n  VENCIDOS:");
+    vencidos.forEach(p => {
+      console.log(
+        `  [${p.getId()}] ${p.getUsuario().getNombre()} | ` +
+        `"${p.getLibro().getTitulo()}" | ` +
+        `${Math.abs(p.getDiasRestantes())} día(s) de retraso`
+      );
+    });
+  }
+}
+
+function verHistorial(): void {
+  console.log("\n--- HISTORIAL DE PRÉSTAMOS ---");
+  const historial = sistema.listarHistorial();
+  if (historial.length === 0) { console.log("No hay registros en el historial."); return; }
+  historial.forEach(h => console.log(" ", h.toString()));
+}
+
+async function verMultas(): Promise<void> {
+  console.log("\n--- MULTAS ---");
+  const multas = sistema.listarMultas();
+  if (multas.length === 0) { console.log("No hay multas registradas."); return; }
+
+  multas.forEach(m => console.log(" ", m.toString()));
+
+  const pendientes = multas.filter(m => !m.isPagada());
+  if (pendientes.length === 0) { console.log("\n✔ Todas las multas están pagadas."); return; }
+
+  const pagar = await preguntar("\n¿Deseas pagar una multa? (s/n): ");
+  if (pagar.toLowerCase() !== "s") return;
+
+  const multaId = await preguntar("ID de la multa a pagar: ");
+  try {
+    sistema.pagarMulta(multaId);
+    console.log("✔ Multa pagada correctamente.");
+  } catch (e: any) {
+    console.log(`Error: ${e.message}`);
+  }
+}
 // ================================================
 // MENÚ PRINCIPAL
 // ================================================
@@ -212,12 +283,15 @@ function mostrarMenu(): void {
   console.log("║  3. Realizar préstamo                ║");
   console.log("║  4. Devolver libro                   ║");
   console.log("║  5. Listar préstamos                 ║");
+  console.log("║  6. Ver alertas de vencimiento       ║");
+  console.log("║  7. Ver historial                    ║");
+  console.log("║  8. Ver multas                       ║");
   console.log("║  0. Salir                            ║");
   console.log("╚══════════════════════════════════════╝");
 }
 
 async function iniciar(): Promise<void> {
-  console.log("\n✅ Sistema iniciado con datos de ejemplo.");
+  console.log("\n Sistema iniciado con datos de ejemplo.");
   console.log("   Libros: L1, L2, L3, L4");
   console.log("   Usuarios: U1 (Ana), U2 (Luis), U3 (Carlos)");
 
@@ -233,8 +307,11 @@ async function iniciar(): Promise<void> {
       case "3": await realizarPrestamo(); break;
       case "4": await devolverLibro();    break;
       case "5": listarPrestamos();        break;
+      case "6": verAlertas();             break;
+      case "7": verHistorial();           break;
+      case "8": await verMultas();        break;
       case "0":
-        console.log("\n👋 Cerrando el sistema. ¡Hasta luego!");
+        console.log("\n Cerrando el sistema. ¡Hasta luego!");
         activo = false;
         break;
       default:

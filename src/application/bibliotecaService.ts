@@ -155,6 +155,38 @@ export class BibliotecaService {
   listarPrestamos(): Prestamo[] {
     return this.prestamos;
   }
+  getAlertasVencimiento(diasUmbral: number = 3): Prestamo[] {
+    this.verificarVencimientos();
+    return this.prestamos.filter(p => {
+      const dias = p.getDiasRestantes();
+      return p.getEstado() === EstadoPrestamo.ACTIVO && dias <= diasUmbral;
+    });
+  }
+
+  getPrestamosvencidos(): Prestamo[] {
+    this.verificarVencimientos();
+    return this.prestamos.filter(p => p.getEstado() === EstadoPrestamo.VENCIDO);
+  }
+
+  // ==============================
+  // HISTORIAL Y MULTAS
+  // ==============================
+
+  listarMultas(): Multa[] {
+    return this.multas;
+  }
+
+  listarHistorial(): HistorialPrestamo[] {
+    return this.historial;
+  }
+
+  listarHistorialPorUsuario(usuarioId: string): HistorialPrestamo[] {
+    return this.historial.filter(h => h.getUsuarioId() === usuarioId);
+  }
+
+  listarHistorialPorLibro(libroId: string): HistorialPrestamo[] {
+    return this.historial.filter(h => h.getLibro() === libroId);
+  }
 
 }
 
