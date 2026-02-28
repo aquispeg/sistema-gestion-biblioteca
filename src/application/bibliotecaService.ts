@@ -2,12 +2,17 @@ import { Usuario } from "../domain/Usuario";
 import { Libro } from "../domain/libro";
 import { Prestamo } from "../domain/prestamo";
 import { Ejemplar } from "../domain/ejemplar";
+import { Multa} from "../domain/multa";
+import {HistorialPrestamo} from "../domain/historialprestamo";
+import {EstadoPrestamo} from "../domain/enums/index";
 
 export class BibliotecaService {
 
   private usuarios: Usuario[] = [];
   private libros: Libro[] = [];
   private prestamos: Prestamo[] = [];
+  private multas: Multa[] = [];
+  private historial: HistorialPrestamo[] = [];
 
   // ==============================
   // REGISTROS
@@ -48,6 +53,12 @@ export class BibliotecaService {
     if (!libro) {
       throw new Error("Libro no encontrado");
     }
+    const multaPendiente = this.multas.find(
+      m => m.getPrestamoId().startsWith(usuarioId) && !m.isPagada()
+    );
+    if (multaPendiente) {
+      throw new Error(`El usuario tiene una multa pendiente de S/ ${multaPendiente.getMonto().toFixed(2)}. Debe pagarla antes de solicitar un préstamo.`);
+    }
 
     if (!usuario.puedeSolicitarPrestamo()) {
       throw new Error("El usuario alcanzó el máximo de préstamos");
@@ -80,15 +91,54 @@ export class BibliotecaService {
   // DEVOLUCIÓN
   // ==============================
 
-  devolverLibro(prestamoId: string): void {
+  devolverLibro(prestamoId: string): Multa | null{
     const prestamo = this.prestamos.find(p => p.getId() === prestamoId);
 
     if (!prestamo) {
       throw new Error("Préstamo no encontrado");
     }
+    prestamo.verificarVencimiento();
+    const diasRetraso = prestamo.getDiasRetraso();
+    let multa: Multa | null = null;
 
+    // Generar multa automática si hay retraso
+    if (diasRetraso > 0) {
+      multa = new Multa(
+        `${prestamo.getUsuario().getId()}-${prestamoId}`,
+        prestamo.getUsuario().getNombre(),
+        prestamo.getLibro().getTitulo(),
+        diasRetraso
+      );
+      this.multas.push(multa);
+    }
+
+    // Registrar en historial
+    const registro = new HistorialPrestamo(
+      prestamo.getId(),
+      prestamo.getUsuario().getId(),
+      prestamo.getUsuario().getNombre(),
+      prestamo.getLibro().getId(),
+      prestamo.getLibro().getTitulo(),
+      prestamo.getFechaInicio(),
+      prestamo.getFechaVencimiento(),
+      diasRetraso > 0 ? EstadoPrestamo.VENCIDO : EstadoPrestamo.DEVUELTO,
+      diasRetraso > 0
+    );
+    this.historial.push(registro);
     prestamo.devolver();
+    return multa;
   }
+
+  // ==============================
+  // PAGAR MULTA
+  // ==============================
+
+  pagarMulta(multaId: string): void {
+    const multa = this.multas.find(m => m.getId() === multaId);
+    if (!multa) throw new Error("Multa no encontrada");
+    multa.pagar();
+  }
+  
 
   // ==============================
   // VERIFICAR VENCIMIENTOS
