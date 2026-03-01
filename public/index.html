@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BiblioGest — Sistema de Biblioteca Escolar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">📚</div>
+    <div>
+      <div class="sidebar-logo-text">BiblioGest</div>
+      <div class="sidebar-logo-sub">Biblioteca Escolar</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Principal</div>
+    <div class="nav-item active" onclick="goTo('dashboard')"><span class="nav-item-icon">🏠</span> Inicio</div>
+    <div class="nav-section-title">Catálogo</div>
+    <div class="nav-item" onclick="goTo('libros')"><span class="nav-item-icon">📖</span> Libros</div>
+    <div class="nav-item" onclick="goTo('usuarios')"><span class="nav-item-icon">👥</span> Usuarios</div>
+    <div class="nav-section-title">Préstamos</div>
+    <div class="nav-item" onclick="goTo('prestamos')"><span class="nav-item-icon">🔄</span> Préstamos</div>
+    <div class="nav-item" onclick="goTo('devolucion')"><span class="nav-item-icon">↩️</span> Devolución</div>
+    <div class="nav-section-title">Reportes</div>
+    <div class="nav-item" onclick="goTo('alertas')">
+      <span class="nav-item-icon">⏰</span> Alertas
+      <span class="nav-badge" id="badge-alertas" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('multas')">
+      <span class="nav-item-icon">💰</span> Multas
+      <span class="nav-badge" id="badge-multas" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('historial')"><span class="nav-item-icon">📜</span> Historial</div>
+  </nav>
+  <div class="sidebar-footer">v1.0 · UNJBG - ESIS</div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">Inicio</div>
+      <div class="topbar-sub"   id="topbar-sub">Resumen general del sistema</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbar-date"></div>
+      <div class="topbar-user">👤 Bibliotecario</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-info"><h3 id="stat-libros">—</h3><p>Libros registrados</p></div><div class="stat-icon stat-azul">📖</div></div>
+        <div class="stat-card"><div class="stat-info"><h3 id="stat-usuarios">—</h3><p>Usuarios registrados</p></div><div class="stat-icon stat-verde">👥</div></div>
+        <div class="stat-card"><div class="stat-info"><h3 id="stat-activos">—</h3><p>Préstamos activos</p></div><div class="stat-icon stat-amarillo">🔄</div></div>
+        <div class="stat-card"><div class="stat-info"><h3 id="stat-vencidos">—</h3><p>Préstamos vencidos</p></div><div class="stat-icon stat-rojo">⚠️</div></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header"><h3>Préstamos recientes</h3></div>
+          <table><thead><tr><th>Usuario</th><th>Libro</th><th>Estado</th><th>Días rest.</th></tr></thead>
+          <tbody id="dash-prestamos"></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Alertas activas</h3></div>
+          <div class="card-body" id="dash-alertas-body"></div>
+        </div>
+        <div class="card full">
+          <div class="card-header"><h3>Libros del catálogo</h3></div>
+          <table><thead><tr><th>ID</th><th>Título</th><th>Autor</th><th>Categoría</th><th>Disponible</th></tr></thead>
+          <tbody id="dash-libros"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIBROS -->
+    <div id="page-libros" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Libros</h2><p>Catálogo de libros y ejemplares</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-libro')">+ Registrar libro</button>
+      </div>
+      <div class="card">
+        <table><thead><tr><th>ID</th><th>Título</th><th>Autor</th><th>Categoría</th><th>Días máx.</th><th>Disponible</th><th>Prestable</th></tr></thead>
+        <tbody id="tabla-libros"></tbody></table>
+      </div>
+    </div>
+
+    <!-- USUARIOS -->
+    <div id="page-usuarios" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Usuarios</h2><p>Estudiantes y docentes</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-usuario')">+ Registrar usuario</button>
+      </div>
+      <div class="card">
+        <table><thead><tr><th>ID</th><th>Nombre</th><th>Tipo</th><th>Máx. préstamos</th></tr></thead>
+        <tbody id="tabla-usuarios"></tbody></table>
+      </div>
+    </div>
+
+    <!-- PRÉSTAMOS -->
+    <div id="page-prestamos" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Préstamos</h2><p>Control de préstamos activos</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-prestamo')">+ Nuevo préstamo</button>
+      </div>
+      <div class="card">
+        <table><thead><tr><th>ID</th><th>Usuario</th><th>Libro</th><th>Inicio</th><th>Vencimiento</th><th>Días rest.</th><th>Estado</th></tr></thead>
+        <tbody id="tabla-prestamos"></tbody></table>
+      </div>
+    </div>
+
+    <!-- DEVOLUCIÓN -->
+    <div id="page-devolucion" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Devolución</h2><p>Registra la devolución de un libro</p></div>
+      </div>
+      <div class="card" style="max-width:560px;">
+        <div class="card-body">
+          <div id="dev-resultado"></div>
+          <div class="form-group" style="margin-bottom:1rem;">
+            <label>Seleccionar préstamo activo</label>
+            <select id="dev-select"><option value="">-- Elige un préstamo --</option></select>
+          </div>
+          <div id="dev-info" style="display:none;margin-bottom:1rem;"></div>
+          <button class="btn btn-primary" onclick="registrarDevolucion()">↩️ Registrar devolución</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="page-alertas" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Alertas de vencimiento</h2><p>Préstamos próximos a vencer y vencidos</p></div>
+      </div>
+      <div id="alertas-container"></div>
+    </div>
+
+    <!-- MULTAS -->
+    <div id="page-multas" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Multas</h2><p>S/ 1.00 por día de retraso</p></div>
+      </div>
+      <div class="card">
+        <table><thead><tr><th>ID</th><th>Préstamo</th><th>Días retraso</th><th>Monto</th><th>Estado</th><th>Acción</th></tr></thead>
+        <tbody id="tabla-multas"></tbody></table>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div id="page-historial" class="page">
+      <div class="section-header">
+        <div class="section-header-text"><h2>Historial</h2><p>Registro completo de devoluciones</p></div>
+      </div>
+      <div class="card">
+        <table><thead><tr><th>ID</th><th>Detalle</th><th>Multa</th></tr></thead>
+        <tbody id="tabla-historial"></tbody></table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<!-- MODAL LIBRO -->
+<div class="modal-overlay" id="modal-libro">
+  <div class="modal">
+    <div class="modal-header"><h3>Registrar libro</h3><button class="modal-close" onclick="closeModal('modal-libro')">✕</button></div>
+    <div class="modal-body">
+      <div id="alert-libro"></div>
+      <div class="form-grid">
+        <div class="form-group"><label>ID</label><input id="l-id" placeholder="Ej: L5"/></div>
+        <div class="form-group"><label>Título</label><input id="l-titulo" placeholder="Título"/></div>
+        <div class="form-group"><label>Autor</label><input id="l-autor" placeholder="Autor"/></div>
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="l-cat">
+            <option value="FICCION">Ficción</option><option value="CIENCIA">Ciencia</option>
+            <option value="HISTORIA">Historia</option><option value="MATEMATICAS">Matemáticas</option>
+            <option value="LITERATURA">Literatura</option><option value="REVISTA">Revista</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Días máx. préstamo</label><input id="l-dias" type="number" value="7"/></div>
+        <div class="form-group"><label>¿Prestable?</label>
+          <select id="l-prestable"><option value="true">Sí</option><option value="false">No (Referencia)</option></select>
+        </div>
+        <div class="form-group full"><label>Códigos de ejemplares (separados por coma)</label><input id="l-ejemplares" placeholder="Ej: E10, E11"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-libro')">Cancelar</button>
+      <button class="btn btn-primary" onclick="registrarLibro()">Guardar libro</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL USUARIO -->
+<div class="modal-overlay" id="modal-usuario">
+  <div class="modal">
+    <div class="modal-header"><h3>Registrar usuario</h3><button class="modal-close" onclick="closeModal('modal-usuario')">✕</button></div>
+    <div class="modal-body">
+      <div id="alert-usuario"></div>
+      <div class="form-grid">
+        <div class="form-group"><label>ID</label><input id="u-id" placeholder="Ej: U4"/></div>
+        <div class="form-group"><label>Nombre</label><input id="u-nombre" placeholder="Nombre completo"/></div>
+        <div class="form-group full"><label>Tipo</label>
+          <select id="u-tipo">
+            <option value="PRIMARIA">Estudiante Primaria (máx. 2)</option>
+            <option value="SECUNDARIA">Estudiante Secundaria (máx. 2)</option>
+            <option value="DOCENTE">Docente (máx. 5)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-usuario')">Cancelar</button>
+      <button class="btn btn-primary" onclick="registrarUsuario()">Guardar usuario</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRÉSTAMO -->
+<div class="modal-overlay" id="modal-prestamo">
+  <div class="modal">
+    <div class="modal-header"><h3>Nuevo préstamo</h3><button class="modal-close" onclick="closeModal('modal-prestamo')">✕</button></div>
+    <div class="modal-body">
+      <div id="alert-prestamo"></div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Usuario</label>
+          <select id="p-usuario"><option value="">-- Selecciona usuario --</option></select>
+        </div>
+        <div class="form-group full"><label>Libro</label>
+          <select id="p-libro"><option value="">-- Selecciona libro --</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-prestamo')">Cancelar</button>
+      <button class="btn btn-primary" onclick="realizarPrestamo()">Crear préstamo</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html> 
