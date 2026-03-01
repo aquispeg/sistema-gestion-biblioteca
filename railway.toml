@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install && ./node_modules/.bin/tsc"
+buildCommand = "npm install"
 
 [deploy]
-startCommand = "node dist/server.js"
+startCommand = "npx ts-node src/server.ts"
