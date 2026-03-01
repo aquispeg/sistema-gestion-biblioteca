@@ -1,0 +1,33 @@
+[
+  {
+    "id": "L9",
+    "titulo": "Mujercitas",
+    "autor": "Louisa May",
+    "categoriaEnum": "FICCION",
+    "categoriaNombre": "Ficción",
+    "diasMaxPrestamo": 5,
+    "prestable": false,
+    "ejemplares": [
+      {
+        "codigo": "001",
+        "estado": "DISPONIBLE"
+      },
+      {
+        "codigo": "002",
+        "estado": "DISPONIBLE"
+      },
+      {
+        "codigo": "003",
+        "estado": "DISPONIBLE"
+      },
+      {
+        "codigo": "004",
+        "estado": "DISPONIBLE"
+      },
+      {
+        "codigo": "005",
+        "estado": "DISPONIBLE"
+      }
+    ]
+  }
+]
